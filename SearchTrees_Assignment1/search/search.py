@@ -125,6 +125,26 @@ def depthFirstSearch(problem):
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
+    #Same thing as the DFS above, although it's implemented with a Queue
+    Queue = util.Queue()
+    Queue.push((problem.getStartState(), []))
+
+    VisitedNodes = []
+    Path = []
+
+    while Queue.isEmpty() != True:
+        CurrentNode, Path = Queue.pop()
+        if problem.isGoalState(CurrentNode) == True:
+            return Path
+
+        if CurrentNode not in VisitedNodes:
+            VisitedNodes.append(CurrentNode)
+            for NextNode, Action, Cost in problem.getSuccessors(CurrentNode):
+                NewPath = Path + [Action]
+                Queue.push((NextNode, NewPath))
+    else:
+        print "Path if blocked!"
+        return -1
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
