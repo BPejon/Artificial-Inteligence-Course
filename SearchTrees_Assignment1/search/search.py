@@ -82,17 +82,49 @@ def depthFirstSearch(problem):
     To get started, you might want to try some of these simple commands to
     understand the search problem that is being passed in:
 
-    print("Start:", problem.getStartState())
-    print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
-    print("Start's successors:", problem.getSuccessors(problem.getStartState()))
+    print "Start:", problem.getStartState()
+    print "Is the start a goal?", problem.isGoalState(problem.getStartState())
+    print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
 
+    """Easy
+    First, we create a Stack.
+    Then, que will put the directions in order NSEW.
+    When the directions taken lead to an unavailable square, we put the next direction.
+    If all directions are unavala available, we head back and change the directions
+    We do this untill pacman reaches it goal.
+    """
+
+    #2 types of Implementation
+    #2 Stacks - 1 for Next Moves and another for paths
+    #1 Stacks - Nodes have Next Moves and path inside them  -> Using this one
+        
+    Stack = util.Stack()
+    Stack.push((problem.getStartState(), []))
+
+    VisitedNodes = []
+    Path = []
+
+    
+
+    while Stack.isEmpty() != True:
+        CurrentNode, Path = Stack.pop()
+        if problem.isGoalState(CurrentNode) == True:
+            return Path
+        
+        if CurrentNode not in VisitedNodes:
+            VisitedNodes.append(CurrentNode)
+            for NextNode, Action, Cost in problem.getSuccessors(CurrentNode):
+                NewPath = Path + [Action]
+                Stack.push((NextNode, NewPath))
+    else:
+        print "Path is blocked!"
+        return -1
+
+    
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
