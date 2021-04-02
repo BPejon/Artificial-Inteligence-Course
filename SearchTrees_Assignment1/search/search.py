@@ -118,7 +118,7 @@ def depthFirstSearch(problem):
                 NewPath = Path + [Action]
                 Stack.push((NextNode, NewPath))
     else:
-        print "Path is blocked!"
+        print "Path is Blocked!"
         return -1
 
     
@@ -143,13 +143,37 @@ def breadthFirstSearch(problem):
                 NewPath = Path + [Action]
                 Queue.push((NextNode, NewPath))
     else:
-        print "Path if blocked!"
+        print "Path if Blocked!"
         return -1
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    #Easy, the same thing as DFS and BFS although with costs
+
+    PrioQueue = util.PriorityQueue()
+    PrioQueue.push((problem.getStartState(), [], 0), 0)
+
+    VisitedNodes = []
+    Path = []
+
+    while PrioQueue.isEmpty() != True:
+        CurrentNode, Path, PathCost = PrioQueue.pop()
+        if problem.isGoalState(CurrentNode) == True:
+            return Path
+        
+        if CurrentNode not in VisitedNodes:
+            VisitedNodes.append(CurrentNode)
+            for NextNode, Action, ActionCost in problem.getSuccessors(CurrentNode):
+                NewPath = Path + [Action]
+                TotalCost = PathCost + ActionCost
+                PrioQueue.push((NextNode, NewPath, ActionCost), TotalCost)
+
+
+    else:
+        print "Path is Blocked!"
+        return -1
+
 
 def nullHeuristic(state, problem=None):
     """
