@@ -170,8 +170,9 @@ def uniformCostSearch(problem):
             VisitedNodes.append(CurrentNode)
             for NextNode, Action, ActionCost in problem.getSuccessors(CurrentNode):
                 NewPath = Path + [Action]
+                #print "NewPath = ", NewPath
                 NewPathCost = PathCost + ActionCost
-                PrioQueue.push((NextNode, NewPath, ActionCost), NewPathCost)
+                PrioQueue.push((NextNode, NewPath, NewPathCost), NewPathCost)
 
 
     else:
@@ -199,14 +200,14 @@ def aStarSearch(problem, heuristic=nullHeuristic):
         CurrentNode, Path, PathCost = PrioQueue.pop()
         if problem.isGoalState(CurrentNode) == True:
             return Path
-        
+
         if CurrentNode not in VisitedNodes:
             VisitedNodes.append(CurrentNode)
             for NextNode, Action, ActionCost in problem.getSuccessors(CurrentNode):
                 NewPath = Path + [Action]
                 NewPathCost = PathCost + ActionCost
-                NewPathCost += heuristic(NextNode, problem) 
-                PrioQueue.push((NextNode, NewPath, ActionCost), NewPathCost)
+                HeuristicCost = NewPathCost + heuristic(NextNode, problem)
+                PrioQueue.push((NextNode, NewPath, NewPathCost), HeuristicCost)
 
 
     else:
@@ -220,3 +221,10 @@ bfs = breadthFirstSearch
 dfs = depthFirstSearch
 astar = aStarSearch
 ucs = uniformCostSearch
+
+'''
+                if PrioQueue.heap:
+                    print(PrioQueue.heap)
+                else:
+                    print('empty')
+'''
