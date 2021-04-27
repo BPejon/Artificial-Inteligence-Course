@@ -17,7 +17,10 @@ In search.py, you will implement generic search algorithms which are called by
 Pacman agents (in searchAgents.py).
 """
 
+'''Name : Breno Pejon Rodrigues
+Student ID : 2021951241'''
 import util
+import random
 
 class SearchProblem:
     """
@@ -90,7 +93,9 @@ def depthFirstSearch(problem):
     """How it works
     First, we create a Stack.
     Then we put a Node which saves the coordenate and path of Pacman
-    Moreover, we put on the Stack all of the 
+    Moreover, we put on the Stack all of the extended nodes
+    The Stack will take the most recent expanded node, ensuring the deep search.
+    Example of the algorithm in the pdf file.
     """
 
     #2 types of Implementation
@@ -101,9 +106,7 @@ def depthFirstSearch(problem):
     Stack.push((problem.getStartState(), []))
 
     VisitedNodes = []
-    Path = []
-
-    
+    Path = []    
 
     while Stack.isEmpty() != True:
         CurrentNode, Path = Stack.pop()
@@ -112,11 +115,11 @@ def depthFirstSearch(problem):
         
         if CurrentNode not in VisitedNodes:
             VisitedNodes.append(CurrentNode)
-            for NextNode, Action, Cost in problem.getSuccessors(CurrentNode):
+            for NextNode, Action, Cost in problem.getSuccessors(CurrentNode): #get titles next to the node. Return 3 things (Node,NexMovement,CostOfMovement)
                 NewPath = Path + [Action]
                 Stack.push((NextNode, NewPath))
     else:
-        print "Path is Blocked!"
+        print ("Path is Blocked!")
         return -1
 
     
@@ -143,17 +146,17 @@ def breadthFirstSearch(problem):
                 NewPath = Path + [Action]
                 Queue.push((NextNode, NewPath))
     else:
-        print "Path if Blocked!"
+        print ("Path if Blocked!")
         return -1
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    #Easy, the same thing as DFS and BFS although with costs
     """
     To create a UniformCostSeach, we will need a Priority Queue
     The Queue will store One Node with the Coordinates, the Path and the Total Path Cost,
-    and the priority will be the cost of the actual node 
+    and the priority will be the cost of the actual node.
+    When some node is put on the Queue, it will change based on his priority.
     """
     PrioQueue = util.PriorityQueue()
     PrioQueue.push((problem.getStartState(), [], 0), 0)
@@ -170,13 +173,12 @@ def uniformCostSearch(problem):
             VisitedNodes.append(CurrentNode)
             for NextNode, Action, ActionCost in problem.getSuccessors(CurrentNode):
                 NewPath = Path + [Action]
-                #print "NewPath = ", NewPath
                 NewPathCost = PathCost + ActionCost
                 PrioQueue.push((NextNode, NewPath, NewPathCost), NewPathCost)
 
 
     else:
-        print "Path is Blocked!"
+        print ("Path is Blocked!")
         return -1
 
 
@@ -206,15 +208,16 @@ def aStarSearch(problem, heuristic=nullHeuristic):
             for NextNode, Action, ActionCost in problem.getSuccessors(CurrentNode):
                 NewPath = Path + [Action]
                 NewPathCost = PathCost + ActionCost
-                HeuristicCost = NewPathCost + heuristic(NextNode, problem)
+                try: #used on every heuristics
+                    HeuristicCost = NewPathCost + heuristic(NextNode, problem) 
+                except: #used when runs myHeuristic, because I have one parameter more
+                    HeuristicCost = NewPathCost + heuristic(NextNode, problem, CurrentNode)
                 PrioQueue.push((NextNode, NewPath, NewPathCost), HeuristicCost)
 
 
     else:
-        print "Path is Blocked!"
+        print ("Path is Blocked!")
         return -1
-
-
 
 # Abbreviations
 bfs = breadthFirstSearch
@@ -223,6 +226,7 @@ astar = aStarSearch
 ucs = uniformCostSearch
 
 '''
+                print Heap - used for debugging
                 if PrioQueue.heap:
                     print(PrioQueue.heap)
                 else:
